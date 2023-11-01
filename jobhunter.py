@@ -4,10 +4,11 @@ import json
 import requests
 from datetime import date
 import html2text
-
+# imported what I need to import.
 
 # Connect to database
 # You may need to edit the connect function based on your local settings.#I made a password for my database because it is important to do so. Also make sure MySQL server is running or it will not connect
+# Make necessary changes so that the MYSQL server is running and not unconnected
 def connect_to_sql():
     conn = mysql.connector.connect(user='root', password='',
                                    host='127.0.0.1', database='cne340')
@@ -19,6 +20,7 @@ def create_tables(cursor):
     # Creates table
     # Must set Title to CHARSET utf8 unicode Source: http://mysql.rjweb.org/doc.php/charcoll.
     # Python is in latin-1 and error (Incorrect string value: '\xE2\x80\xAFAbi...') will occur if Description is not in unicode format due to the json data
+    # Make sure there is no error happening in the Description
     cursor.execute('''CREATE TABLE IF NOT EXISTS jobs (id INT PRIMARY KEY auto_increment, Job_id varchar(50) , 
     company varchar (300), Created_at DATE, url varchar(30000), Title LONGBLOB, Description LONGBLOB ); ''')
 
@@ -31,6 +33,7 @@ def query_sql(cursor, query):
 
 
 # Add a new job
+# no adding a previous job
 def add_new_job(cursor, jobdetails):
     # extract all required columns
     description = html2text.html2text(jobdetails['description'])
@@ -42,12 +45,14 @@ def add_new_job(cursor, jobdetails):
 
 
 # Check if new job
+# no older jobs duplicated
 def check_if_job_exists(cursor, jobdetails):
     ##Add your code here
     query = "UPDATE"
     return query_sql(cursor, query)
 
 # Deletes job
+# deletes any job more than 14 days old
 def delete_job(cursor, jobdetails):
     ##Add your code here
     query = "UPDATE"
